@@ -14,13 +14,13 @@ public class CommandsManager
         };
     }
 
-    public IBotCommand GetCommand(string commandName)
+    public IBotCommand? GetCommand(string commandName)
     {
-        if (_commands.TryGetValue(commandName, out Type commandType))
+        if (_commands.TryGetValue(commandName, out var commandType))
         {
             return _serviceProvider.GetRequiredService(commandType) as IBotCommand ?? throw new InvalidOperationException();
         }
-        
+
         return null;
     }
 }

@@ -16,11 +16,15 @@ public class UpdateHandler : IUpdateHandler
     public async Task HandleMessageAsync(ITelegramBotClient botClient, Message message, CancellationToken cancellationToken)
     {
         var input = message.Text?.Split(' ')[0];
-        
+
         if (input != null)
         {
             var command = _commandsManager.GetCommand(input);
-            await command.ExecuteAsync(botClient, message, cancellationToken);
+
+            if (command != null)
+            {
+                await command.ExecuteAsync(botClient, message, cancellationToken);
+            }
         }
     }
 
