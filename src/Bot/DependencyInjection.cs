@@ -13,6 +13,7 @@ public static class DependencyInjection
     {
         services.AddDbContext<LakeRunDbContext>(options =>
             options.UseSqlite(config.GetConnectionString("DefaultConnection")));
+        services.AddScoped<LakeRunDbContextInitializer>();
         services.AddHostedService<Worker>();
         var botToken = config.GetValue<string>("TelegramBotToken");
         if (string.IsNullOrEmpty(botToken))
