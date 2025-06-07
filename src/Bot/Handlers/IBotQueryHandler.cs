@@ -1,7 +1,7 @@
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
-namespace LakeRun.Bot.Handlers.Queries;
+namespace LakeRun.Bot.Handlers;
 
 public interface IBotQueryHandler
 {

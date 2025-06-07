@@ -6,18 +6,17 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace LakeRun.Bot.Handlers.Commands.Roles;
 
-public class RolesCommand : IBotCommandHandler
+public class RolesCommandHandler : IBotCommandHandler
 {
     private readonly LakeRunDbContext _dbContext;
 
-    public RolesCommand(LakeRunDbContext dbContext)
+    public RolesCommandHandler(LakeRunDbContext dbContext)
     {
         _dbContext = dbContext;
     }
 
     public async Task HandleAsync(ITelegramBotClient botClient, Message message, CancellationToken cancellationToken)
     {
-        var chatId = message.Chat.Id;
         var roles = await _dbContext.Roles.ToListAsync(cancellationToken);
 
         ReplyMarkup keyboard = new ReplyKeyboardRemove();
@@ -39,11 +38,5 @@ public class RolesCommand : IBotCommandHandler
             text: "Роли волонтеров:",
             replyMarkup: keyboard,
             cancellationToken: cancellationToken);
-        
-        async Task<Message> GetRoleDescription(int roleId)
-        {
-                return await botClient.SendMessage(
-                    )
-        }
     }
 }
