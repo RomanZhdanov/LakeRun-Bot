@@ -23,7 +23,6 @@ public static class DependencyInjection
         services.AddSingleton<ITelegramBotClient>(new TelegramBotClient(botToken));
         services.AddSingleton<IBotHandler, BotHandler>();
         services.AddSingleton<IUpdateHandler, UpdateHandler>();
-        services.AddSingleton<CommandsManager>();
         services.AddBotCommands();
 
         return services;
