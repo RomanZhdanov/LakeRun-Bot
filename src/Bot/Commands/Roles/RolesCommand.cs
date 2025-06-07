@@ -3,6 +3,7 @@ using LakeRun.Bot.Data;
 using Microsoft.EntityFrameworkCore;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace LakeRun.Bot.Commands.Roles;
 
@@ -18,16 +19,25 @@ public class RolesCommand : IBotCommand
     public async Task ExecuteAsync(ITelegramBotClient botClient, Message message, CancellationToken cancellationToken)
     {
         var roles = await _dbContext.Roles.ToListAsync(cancellationToken);
-        var text = new StringBuilder();
+
+        ReplyMarkup keyboard = new ReplyKeyboardRemove();
+        var buttonsRows = new List<List<InlineKeyboardButton>>();
 
         foreach (var role in roles)
         {
-            text.AppendLine($"{role.Name}");
+            var row = new List<InlineKeyboardButton>
+            {
+                InlineKeyboardButton.WithCallbackData(role.Name, role.Id.ToString())
+            };
+            buttonsRows.Add(row);
         }
+        
+        keyboard = new InlineKeyboardMarkup(buttonsRows);
         
         await botClient.SendMessage(
             chatId: message.Chat.Id,
-            text: text.ToString(),
+            text: "Роли волонтеров:",
+            replyMarkup: keyboard,
             cancellationToken: cancellationToken);
     }
 }
