@@ -13,7 +13,7 @@ public static class ServiceCollectionExtension
 
         foreach (var implementation in implementations)
         {
-            services.AddTransient(implementation);
+            services.AddScoped(implementation);
         }
         return services;
     }
