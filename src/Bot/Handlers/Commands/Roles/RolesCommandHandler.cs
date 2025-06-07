@@ -1,13 +1,12 @@
-using System.Text;
 using LakeRun.Bot.Data;
 using Microsoft.EntityFrameworkCore;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace LakeRun.Bot.Commands.Roles;
+namespace LakeRun.Bot.Handlers.Commands.Roles;
 
-public class RolesCommand : IBotCommand
+public class RolesCommand : IBotCommandHandler
 {
     private readonly LakeRunDbContext _dbContext;
 
@@ -16,8 +15,9 @@ public class RolesCommand : IBotCommand
         _dbContext = dbContext;
     }
 
-    public async Task ExecuteAsync(ITelegramBotClient botClient, Message message, CancellationToken cancellationToken)
+    public async Task HandleAsync(ITelegramBotClient botClient, Message message, CancellationToken cancellationToken)
     {
+        var chatId = message.Chat.Id;
         var roles = await _dbContext.Roles.ToListAsync(cancellationToken);
 
         ReplyMarkup keyboard = new ReplyKeyboardRemove();
@@ -39,5 +39,11 @@ public class RolesCommand : IBotCommand
             text: "Роли волонтеров:",
             replyMarkup: keyboard,
             cancellationToken: cancellationToken);
+        
+        async Task<Message> GetRoleDescription(int roleId)
+        {
+                return await botClient.SendMessage(
+                    )
+        }
     }
 }

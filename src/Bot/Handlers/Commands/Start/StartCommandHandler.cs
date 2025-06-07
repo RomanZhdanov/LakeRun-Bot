@@ -1,11 +1,11 @@
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
-namespace LakeRun.Bot.Commands;
+namespace LakeRun.Bot.Handlers.Commands;
 
-public class StartCommand : IBotCommand
+public class StartCommand : IBotCommandHandler
 {
-    public async Task ExecuteAsync(ITelegramBotClient botClient, Message message, CancellationToken cancellationToken)
+    public async Task HandleAsync(ITelegramBotClient botClient, Message message, CancellationToken cancellationToken)
     {
         await botClient.SendMessage(
             chatId: message.Chat.Id,
