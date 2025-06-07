@@ -1,7 +1,5 @@
-using LakeRun.Bot.Handlers.Commands;
 using LakeRun.Bot.Handlers.Commands.Roles;
 using LakeRun.Bot.Handlers.Commands.Start;
-using LakeRun.Bot.Handlers.Queries;
 using LakeRun.Bot.Handlers.Queries.GetRoleDescription;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -52,7 +50,7 @@ public class UpdateHandler : IUpdateHandler
         }
         
         var data = query.Data!;
-        var key = data.Split('|')[0];
+        var key = data.Split(':')[0];
 
         if (_queries.TryGetValue(key, out var queryType))
         {

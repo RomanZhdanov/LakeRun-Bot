@@ -26,7 +26,7 @@ public class RolesCommandHandler : IBotCommandHandler
         {
             var row = new List<InlineKeyboardButton>
             {
-                InlineKeyboardButton.WithCallbackData(role.Name, role.Id.ToString())
+                InlineKeyboardButton.WithCallbackData(role.Name, $"GetRoleDescription:roleId={role.Id.ToString()}")
             };
             buttonsRows.Add(row);
         }
