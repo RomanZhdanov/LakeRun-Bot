@@ -1,5 +1,6 @@
 using LakeRun.Bot.Extensions;
 using LakeRun.Bot.Data;
+using LakeRun.Bot.Services;
 using Microsoft.EntityFrameworkCore;
 using Telegram.Bot;
 
@@ -14,6 +15,7 @@ public static class DependencyInjection
         
         services.AddScoped<LakeRunDbContextInitializer>();
         services.AddHostedService<Worker>();
+        services.AddHostedService<EventsTrackerService>();
         
         var botToken = config.GetValue<string>("TelegramBotToken");
         
