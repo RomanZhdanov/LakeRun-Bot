@@ -1,5 +1,6 @@
 using LakeRun.Bot.Handlers.Commands.Roles;
 using LakeRun.Bot.Handlers.Commands.Start;
+using LakeRun.Bot.Handlers.Commands.Volunteer;
 using LakeRun.Bot.Handlers.Queries.GetRoleDescription;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -18,7 +19,8 @@ public class UpdateHandler : IUpdateHandler
         _commands = new Dictionary<string, Type>
         {
             { "/start", typeof(StartCommandHandler) },
-            { "/roles", typeof(RolesCommandHandler) }
+            { "/roles", typeof(RolesCommandHandler) },
+            { "/volunteer", typeof(VolunteerCommandHandler) },
         };
 
         _queries = new Dictionary<string, Type>
