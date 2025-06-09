@@ -39,7 +39,7 @@ public class VolunteerCommandHandler : IBotCommandHandler
         {
             var row = new List<InlineKeyboardButton>
             {
-                InlineKeyboardButton.WithCallbackData(role.Name, $"BecomeVolunteer:roleId={role.Id.ToString()}")
+                InlineKeyboardButton.WithCallbackData(role.Name, $"BecomeVolunteer:{curEvent.Id}|{role.Id.ToString()}")
             };
             buttonsRows.Add(row);
         }

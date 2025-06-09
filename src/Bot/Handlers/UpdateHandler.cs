@@ -1,6 +1,7 @@
 using LakeRun.Bot.Handlers.Commands.Roles;
 using LakeRun.Bot.Handlers.Commands.Start;
 using LakeRun.Bot.Handlers.Commands.Volunteer;
+using LakeRun.Bot.Handlers.Queries.BecomeVolunteer;
 using LakeRun.Bot.Handlers.Queries.GetRoleDescription;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -25,7 +26,8 @@ public class UpdateHandler : IUpdateHandler
 
         _queries = new Dictionary<string, Type>
         {
-            { "GetRoleDescription", typeof(GetRoleDescriptionQueryHandler) }
+            { "GetRoleDescription", typeof(GetRoleDescriptionQueryHandler) },
+            { "BecomeVolunteer", typeof(BecomeVolunteerQueryHandler) },
         };
     }
 
@@ -37,9 +39,26 @@ public class UpdateHandler : IUpdateHandler
         {
             if (_commands.TryGetValue(input, out var commandType))
             {
-                using var scope = _serviceProvider.CreateScope();
-                var handler = scope.ServiceProvider.GetRequiredService(commandType) as IBotCommandHandler ?? throw new InvalidOperationException();
-                await handler.HandleAsync(botClient, message, cancellationToken);
+                try
+                {
+                    using var scope = _serviceProvider.CreateScope();
+                    var handler = scope.ServiceProvider.GetRequiredService(commandType) as IBotCommandHandler ?? throw new InvalidOperationException();
+                    await handler.HandleAsync(botClient, message, cancellationToken);
+                }
+                catch (Exception e)
+                {
+                    await botClient.SendMessage(
+                        chatId: message.Chat.Id,
+                        text: $"Произошла ошибка: {e.Message}",
+                        cancellationToken: cancellationToken);
+                }
+            }
+            else
+            {
+                await botClient.SendMessage(
+                    chatId:  message.Chat.Id,
+                    text: $"Не найден обработчик для этой команды",
+                    cancellationToken: cancellationToken);
             }
         }
     }
@@ -56,9 +75,26 @@ public class UpdateHandler : IUpdateHandler
 
         if (_queries.TryGetValue(key, out var queryType))
         {
-            using var scope = _serviceProvider.CreateScope();
-            var handler = scope.ServiceProvider.GetRequiredService(queryType) as IBotQueryHandler ?? throw new InvalidOperationException();
-            await handler.HandleAsync(botClient, query, cancellationToken);
+            try
+            {
+                using var scope = _serviceProvider.CreateScope();
+                var handler = scope.ServiceProvider.GetRequiredService(queryType) as IBotQueryHandler ?? throw new InvalidOperationException();
+                await handler.HandleAsync(botClient, query, cancellationToken);
+            }
+            catch (Exception e)
+            {
+                await botClient.SendMessage(
+                    chatId: query.Message.Chat.Id,
+                    text: $"Произошла ошибка: {e.Message}",
+                    cancellationToken: cancellationToken);
+            }
+        }
+        else
+        {
+            await botClient.AnswerCallbackQuery(
+                callbackQueryId: query.Id,
+                text: "Не найден обработчик для этого запроса",
+                cancellationToken: cancellationToken);
         }
     }
 
